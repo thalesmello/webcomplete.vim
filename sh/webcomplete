@@ -1,0 +1,16 @@
+#!/bin/sh
+
+xjs() {
+    osascript -e'on run{a}' -e'tell app"google chrome"to tell active tab of window 1 to execute javascript a' -eend "$1";
+}
+
+splitwords() {
+    # copy lines and split words
+    sed -e 'p;s/[^a-zA-Z0-9_]/ /g' |
+    # split on spaces
+    tr -s '[:space:]' '\n' |
+    # remove surrounding non-word characters
+    grep -o "\\w.*\\w"
+}
+
+xjs document.body.innerText | splitwords | sort -u
