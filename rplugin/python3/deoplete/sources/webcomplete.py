@@ -7,9 +7,9 @@ class Source(Base):
     def __init__(self, vim):
         Base.__init__(self, vim)
 
-        self.name = 'tmux-complete'
+        self.name = 'webcomplete'
         self.kind = 'keyword'
-        self.mark = '[tmux]'
+        self.mark = '[web]'
         self.rank = 4
 
     def gather_candidates(self, context):
