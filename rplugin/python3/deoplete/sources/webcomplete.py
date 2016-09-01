@@ -1,6 +1,7 @@
 from .base import Base
-
 import deoplete.util
+from os.path import dirname, abspath, join, pardir
+from subprocess import check_output
 
 
 class Source(Base):
@@ -11,7 +12,10 @@ class Source(Base):
         self.kind = 'keyword'
         self.mark = '[web]'
         self.rank = 4
+        filedir = dirname(abspath(__file__))
+        projectdir = abspath(join(filedir, pardir, pardir, pardir, pardir))
+        self.__script = join(projectdir, 'sh', 'webcomplete')
 
     def gather_candidates(self, context):
-        return [{'word': word} for word in
-                self.vim.call('webcomplete#gather_candidates')]
+        candidates = check_output([self.__script]).decode('utf-8').splitlines()
+        return [{'word': word} for word in candidates]
