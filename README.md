@@ -1,19 +1,38 @@
 # webcomplete.vim
 
-A Deoplete source for Neovim that completes words from the currently open web
-page in your browser
+A Vim plugin that completes words from the currently open web page in your
+browser.
 
 ![demo](./demo.gif)
 
 # Installation
 
-On Neovim, with [vim-plug](https://github.com/junegunn/vim-plug):
+With [vim-plug](https://github.com/junegunn/vim-plug):
 
 ```
-Plug 'Shougo/deoplete.nvim' | Plug 'thalesmello/webcomplete.vim'
+Plug 'thalesmello/webcomplete.vim'
 ```
 
-The completions will appear during insert mode.
+## Using with deoplete
+
+[`deoplete`](https://github.com/Shougo/deoplete.nvim/) is an awesome asynchronous
+completion engine for Neovim. `webcomplete` works with `deoplete` out of the box.
+Just start typing to see suggestions of words comming from your browser.
+
+## Using with `completefunc` or `omnifunc`
+
+Vim allows you to define a `completefunc` or an `omnifunc` to give you
+completions during insert mode. `webcomplete` provides you with a function that
+you can plug into these built in features.
+
+To set it up, use either of the two lines below:
+```
+" Use <C-X><C-U> in insert mode to get completions
+set completefunc=webcomplete#complete
+
+" Use <C-X><C-O> in insert mode to get completions
+set omnifunc=webcomplete#complete
+```
 
 # Limitations
 
