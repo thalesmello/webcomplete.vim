@@ -14,7 +14,8 @@ class Source(Base):
         Base.__init__(self, vim)
 
         self.__last_input = None
-        self.__last_process = MockProcess()
+        self.__cache = None
+        self.__process = MockProcess()
         self.name = 'webcomplete'
         self.kind = 'keyword'
         self.mark = '[web]'
@@ -27,18 +28,24 @@ class Source(Base):
         context['is_async'] = True
 
         if not self._is_same_context(context['input']):
-            self.__last_process.terminate()
+            self.__process.terminate()
             process = Popen([self.__script], stdout=PIPE)
-            self.__last_process = process
+            self.__process = process
+            self.__last_input = context['input']
+            self.__cache = None
 
-        if self.__last_process.poll() is not None:
-            self.print('here')
+        if self.__cache:
+            return self.__cache
+
+        if self.__process.poll() is not None:
             context['is_async'] = False
-            stdoutdata, _ = self.__last_process.communicate()
+            stdoutdata, _ = self.__process.communicate()
             candidates = stdoutdata.decode('utf-8').splitlines()
+            self.__cache = candidates
+
             return [{'word': word} for word in candidates]
 
-        return []
+        return ['']
 
     def _is_same_context(self, input):
-        return self.__last_input and input.starts_with(self.__last_input)
+        return self.__last_input and input.startswith(self.__last_input)
