@@ -35,6 +35,7 @@ class Source(Base):
             self.__cache = None
 
         if self.__cache:
+            context['is_async'] = False
             return self.__cache
 
         if self.__process.poll() is not None:
@@ -45,7 +46,7 @@ class Source(Base):
 
             return [{'word': word} for word in candidates]
 
-        return ['']
+        return []
 
     def _is_same_context(self, input):
         return self.__last_input and input.startswith(self.__last_input)
