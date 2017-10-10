@@ -4,4 +4,4 @@ xjs() {
     osascript -e'on run{a}' -e'tell app"google chrome"to tell active tab of window 1 to execute javascript a' -eend "$1";
 }
 
-xjs "window.___vimwebcomplete___?window.___vimwebcomplete___:window.___vimwebcomplete___=[...new Set(document.body.innerText.match(/\w+/g))].sort().join('\n');"
+xjs "[...new Set(document.body.innerText.match(/\w+/g))].sort().join('\n');"
