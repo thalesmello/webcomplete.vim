@@ -35,7 +35,7 @@ class Source(Base):
             return self.__cache
         else:
             candidates = run(self.__script.split(), shell=True, stdout=PIPE).stdout.decode('utf-8').splitlines()
-            self.__cache = [{'word': word} for wor in candidates]
+            self.__cache = [{'word': word} for word in candidates]
 
             return self.__cache
 
