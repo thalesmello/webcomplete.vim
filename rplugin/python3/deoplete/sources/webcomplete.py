@@ -30,15 +30,14 @@ class Source(Base):
             self.__last_input = context['input']
             self.__cache = None
 
-        if self.__cache:
-            context['is_async'] = False
+        context['is_async'] = False
+        if self.__cache is not None:
             return self.__cache
         else:
-            context['is_async'] = False
             candidates = run(self.__script.split(), shell=True, stdout=PIPE).stdout.decode('utf-8').splitlines()
-            self.__cache = candidates
+            self.__cache = [{'word': word} for wor in candidates]
 
-            return [{'word': word} for word in candidates]
+            return self.__cache
 
         return []
 
