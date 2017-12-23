@@ -1,12 +1,11 @@
-from .base import Base
-import deoplete.util
+'''Web completion of words for Neovim
+This plugin works with Neovim and Deoplete, allowing you to
+complete words from your Chrome instance in your editor.'''
+
 from os.path import dirname, abspath, join, pardir
 from subprocess import run, PIPE
-
-
-class MockProcess(object):
-    def terminate(self):
-        pass
+from .base import Base
+import deoplete.util
 
 
 class Source(Base):
@@ -30,16 +29,14 @@ class Source(Base):
             self.__last_input = context['input']
             self.__cache = None
 
-        context['is_async'] = False
         if self.__cache is not None:
             return self.__cache
-        else:
-            candidates = run(self.__script.split(), shell=True, stdout=PIPE).stdout.decode('utf-8').splitlines()
-            self.__cache = [{'word': word} for word in candidates]
 
-            return self.__cache
+        output = run(self.__script.split(), shell=True, stdout=PIPE).stdout
+        candidates = output.decode('utf-8').splitlines()
+        self.__cache = [{'word': word} for word in candidates]
 
-        return []
+        return self.__cache
 
     def _is_same_context(self, input):
         return self.__last_input and input.startswith(self.__last_input)
