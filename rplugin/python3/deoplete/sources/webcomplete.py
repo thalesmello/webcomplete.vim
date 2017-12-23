@@ -1,7 +1,7 @@
 from .base import Base
 import deoplete.util
 from os.path import dirname, abspath, join, pardir
-from subprocess import Popen, PIPE
+from subprocess import run, PIPE
 
 
 class MockProcess(object):
@@ -11,11 +11,10 @@ class MockProcess(object):
 
 class Source(Base):
     def __init__(self, vim):
-        Base.__init__(self, vim)
-
+        super().__init__(vim)
         self.__last_input = None
         self.__cache = None
-        self.__process = MockProcess()
+
         self.name = 'webcomplete'
         self.kind = 'keyword'
         self.mark = '[web]'
@@ -28,23 +27,17 @@ class Source(Base):
         context['is_async'] = True
 
         if not self._is_same_context(context['input']):
-            self.__process.terminate()
-            process = Popen([self.__script], stdout=PIPE)
-            self.__process = process
             self.__last_input = context['input']
             self.__cache = None
 
-        if self.__cache:
-            context['is_async'] = False
+        context['is_async'] = False
+        if self.__cache is not None:
             return self.__cache
+        else:
+            candidates = run(self.__script.split(), shell=True, stdout=PIPE).stdout.decode('utf-8').splitlines()
+            self.__cache = [{'word': word} for word in candidates]
 
-        if self.__process.poll() is not None:
-            context['is_async'] = False
-            stdoutdata, _ = self.__process.communicate()
-            candidates = stdoutdata.decode('utf-8').splitlines()
-            self.__cache = candidates
-
-            return [{'word': word} for word in candidates]
+            return self.__cache
 
         return []
 

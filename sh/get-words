@@ -1,0 +1,17 @@
+#!/usr/binenv osascript -l JavaScript
+
+function run(argv) {
+  const app = argv[0];
+    const browser = Application(app);
+    if (!browser.running()) {
+      return '';
+    }
+    try {
+      const win = browser.windows[0];
+      const tab = win.activeTab;
+
+      return tab.execute({javascript: "[...new Set(document.body.innerText.match(/\\w+/g))].sort().join('\\n');"})
+    } catch (e) {
+      return '';
+    }
+}
