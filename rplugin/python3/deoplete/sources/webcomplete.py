@@ -8,6 +8,13 @@ from .base import Base
 import deoplete.util
 
 
+def log(msg):
+    from datetime import datetime
+    timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S,%f")
+    with open('/tmp/deoplete-webcomplete.log', 'a') as file_:
+        file_.write('%s %s\n' % (timestamp, msg))
+
+
 class Source(Base):
     def __init__(self, vim):
         super().__init__(vim)
@@ -23,9 +30,10 @@ class Source(Base):
         self.__script = join(projectdir, 'sh', 'webcomplete')
 
     def gather_candidates(self, context):
-        context['is_async'] = True
+        # context['is_async'] = True
 
         if not self._is_same_context(context['input']):
+            log('Reset cache: %s' % context['input'])
             self.__last_input = context['input']
             self.__cache = None
 

@@ -1,3 +1,17 @@
 #!/bin/sh
 
-osascript -l JavaScript "$(dirname "$0")/get-words" "google chrome"
+
+cat << EOF
+PySequenceMethods
+PySequence_Check
+PySequence_Concat
+PySequence_Contains
+PySequence_GetItem
+PySequence_InPlaceConcat
+PySequence_InPlaceRepeat
+PySequence_Repeat
+PySequence_SetItem
+PySequence_Size
+EOF
+#bt words
+#osascript -l JavaScript "$(dirname "$0")/get-words" "google chrome"
