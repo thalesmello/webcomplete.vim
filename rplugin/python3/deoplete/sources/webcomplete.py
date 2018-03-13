@@ -3,7 +3,10 @@ This plugin works with Neovim and Deoplete, allowing you to
 complete words from your Chrome instance in your editor.'''
 
 from os.path import dirname, abspath, join, pardir
-from subprocess import run, PIPE
+from subprocess import check_output, PIPE
+from threading import Thread
+from queue import Queue, Empty
+
 from .base import Base
 import deoplete.util
 
@@ -28,23 +31,38 @@ class Source(Base):
         filedir = dirname(abspath(__file__))
         projectdir = abspath(join(filedir, pardir, pardir, pardir, pardir))
         self.__script = join(projectdir, 'sh', 'webcomplete')
+        self._tasks = Queue()
+        self._thread = Thread(target=self.background_thread, daemon=True)
+        self._thread.start()
+
+    def background_thread(self):
+        while True:
+            input_ = self._tasks.get()
+            output = check_output(self.__script.split(), shell=True)
+            candidates = output.decode('utf-8').splitlines()
+            self.__cache = [{'word': word} for word in candidates]
+
+            # Clear the queue
+            while not self._tasks.empty():
+                try:
+                    self._tasks.get(block=False)
+                except Empty:
+                    break
 
     def gather_candidates(self, context):
-        # context['is_async'] = True
-
         if not self._is_same_context(context['input']):
             log('Reset cache: %s' % context['input'])
             self.__last_input = context['input']
-            self.__cache = None
+            # The input has changed, notify background thread to fetch new words
+            self._tasks.put(self.__last_input)
 
         if self.__cache is not None:
+            # Return what we have now, though results may be a bit outdated
+            context['is_async'] = False
             return self.__cache
 
-        output = run(self.__script.split(), shell=True, stdout=PIPE).stdout
-        candidates = output.decode('utf-8').splitlines()
-        self.__cache = [{'word': word} for word in candidates]
-
-        return self.__cache
+        context['is_async'] = True
+        return []
 
     def _is_same_context(self, input):
         return self.__last_input and input.startswith(self.__last_input)
