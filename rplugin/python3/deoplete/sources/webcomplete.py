@@ -2,7 +2,7 @@
 This plugin works with Neovim and Deoplete, allowing you to
 complete words from your Chrome instance in your editor.'''
 
-from os.path import dirname, abspath, join, pardir
+from os.path import dirname, abspath, join, pardir, expandvars, expanduser
 from subprocess import check_output, PIPE
 from threading import Thread, Event
 
@@ -34,11 +34,17 @@ class Source(Base):
         self.__thread = Thread(target=self.background_thread, daemon=True)
         self.__thread.start()
 
+    def on_init(self, context):
+        vars = context['vars']
+
+        self.__script = expandvars(expanduser(
+            vars.get('deoplete#sources#webcomplete#script', self.__script)))
+
     def background_thread(self):
         while True:
             self.__refresh.wait()
             self.__refresh.clear()
-            output = check_output(self.__script.split(), shell=True)
+            output = check_output(self.__script, shell=True)
             candidates = output.decode('utf-8').splitlines()
             self.__cache = [{'word': word} for word in candidates]
 

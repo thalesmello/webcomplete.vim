@@ -19,6 +19,12 @@ Plug 'thalesmello/webcomplete.vim'
 completion engine for Neovim. `webcomplete` works with `deoplete` out of the box.
 Just start typing to see suggestions of words comming from your browser.
 
+## Options for deoplete
+
+- `g:deoplete#sources#webcomplete#script`: Execute this command-line string
+  to get a list of words instead of default internal `sh/webcomplete`. You may
+  add arguments to the string, e.g. `cat /tmp/words.txt`.
+
 ## Using with `completefunc` or `omnifunc`
 
 Vim allows you to define a `completefunc` or an `omnifunc` to give you
