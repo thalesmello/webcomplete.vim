@@ -10,13 +10,6 @@ from .base import Base
 import deoplete.util
 
 
-def log(msg):
-    from datetime import datetime
-    timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S,%f")
-    with open('/tmp/deoplete-webcomplete.log', 'a') as file_:
-        file_.write('%s %s\n' % (timestamp, msg))
-
-
 class Source(Base):
     def __init__(self, vim):
         super().__init__(vim)
@@ -50,7 +43,6 @@ class Source(Base):
 
     def gather_candidates(self, context):
         if not self._is_same_context(context['input']):
-            log('Reset cache: %s' % context['input'])
             self.__last_input = context['input']
             # The input has changed, notify background thread to fetch new words
             self.__refresh.set()

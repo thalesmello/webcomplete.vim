@@ -1,4 +1,3 @@
 #!/bin/sh
 
-
 osascript -l JavaScript "$(dirname "$0")/get-words" "google chrome"
