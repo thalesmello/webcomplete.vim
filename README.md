@@ -25,6 +25,10 @@ Just start typing to see suggestions of words comming from your browser.
   to get a list of words instead of default internal `sh/webcomplete`. You may
   add arguments to the string, e.g. `cat /tmp/words.txt`.
 
+## Using with ncm2
+
+- `g:ncm2_webcomplete_script`: Same as option for deoplete, but for ncm2.
+
 ## Using with `completefunc` or `omnifunc`
 
 Vim allows you to define a `completefunc` or an `omnifunc` to give you

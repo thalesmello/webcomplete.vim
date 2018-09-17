@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
-import vim
-from ncm2 import Ncm2Source, getLogger
 import re
-from os.path import expanduser, expandvars
 import subprocess
-
 from os.path import dirname, abspath, join, pardir, expandvars, expanduser
 from subprocess import check_output, PIPE
 from threading import Thread, Event
+
+import vim
+from ncm2 import Ncm2Source, getLogger
+
 
 logger = getLogger(__name__)
 
@@ -23,24 +23,18 @@ def log(msg):
 class Source(Ncm2Source):
     def __init__(self, nvim):
         super(Source, self).__init__(nvim)
-        # self.executable_look = nvim.call('executable', 'look')
-        # filedir = dirname(abspath(__file__))
-        # projectdir = abspath(join(filedir, pardir))
-        # join(projectdir, 'sh', 'webcomplete')
-        self.__script = expanduser(expandvars('~/.local/bin/bt words'))
-        # log('script: %s' % self.__script)
+
+        filedir = dirname(abspath(__file__))
+        projectdir = abspath(join(filedir, pardir))
+        self.__script = join(projectdir, 'sh', 'webcomplete')
+        self.__script = self.nvim.eval('g:ncm2_webcomplete_script') \
+            or self.__script
+        self.__script = expanduser(expandvars(self.__script))
 
     def on_complete(self, ctx):
 
-        # query = ctx['base']
-        #
-        # if not self.executable_look:
-        #     return
-
         try:
-            # log('ctx: %s' % ctx)
             matches = self._get_matches()
-            # log('matches: %s' % matches)
             self.complete(ctx, ctx['startccol'], matches)
         except subprocess.CalledProcessError as e:
             log('error: %s' % e)
@@ -55,3 +49,4 @@ class Source(Ncm2Source):
 source = Source(vim)
 
 on_complete = source.on_complete
+
