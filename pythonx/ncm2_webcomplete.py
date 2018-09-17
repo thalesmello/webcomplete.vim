@@ -26,9 +26,7 @@ class Source(Ncm2Source):
 
         filedir = dirname(abspath(__file__))
         projectdir = abspath(join(filedir, pardir))
-        self.__script = join(projectdir, 'sh', 'webcomplete')
-        self.__script = self.nvim.eval('g:ncm2_webcomplete_script') \
-            or self.__script
+        self.__script = self.nvim.eval('g:ncm2_webcomplete_script')
         self.__script = expanduser(expandvars(self.__script))
 
     def on_complete(self, ctx):

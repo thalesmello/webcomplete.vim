@@ -5,6 +5,9 @@ let s:loaded = 1
 
 let g:ncm2_webcomplete_enabled = get(g:, 'ncm2_webcomplete_enabled',  1)
 
+let g:ncm2_webcomplete_script = get(g:, 'ncm2_webcomplete_script',
+            \ expand('<sfile>:h:h') . "/sh/webcomplete")
+
 let g:ncm2_webcomplete#proc = yarp#py3('ncm2_webcomplete')
 
 let g:ncm2_webcomplete#source = get(g:, 'ncm2_webcomplete#source', {
