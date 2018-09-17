@@ -3,6 +3,8 @@
 A Vim plugin that completes words from the currently open web page in your
 browser.
 
+Currently only works on Mac OS and Chrome. There is a [fork that works with Firefox](https://github.com/kimat/webcomplete.vim).
+
 ![demo](./demo.gif)
 
 # Installation
@@ -19,13 +21,15 @@ Plug 'thalesmello/webcomplete.vim'
 completion engine for Neovim. `webcomplete` works with `deoplete` out of the box.
 Just start typing to see suggestions of words comming from your browser.
 
-## Options for deoplete
-
 - `g:deoplete#sources#webcomplete#script`: Execute this command-line string
   to get a list of words instead of default internal `sh/webcomplete`. You may
   add arguments to the string, e.g. `cat /tmp/words.txt`.
 
 ## Using with ncm2
+
+[`ncm2`](https://github.com/ncm2/ncm2/) is also supported. Once `ncm2` is configured
+in your configuration files, the completions for webcomplete should be enabled by
+default.
 
 - `g:ncm2_webcomplete_script`: Same as option for deoplete, but for ncm2.
 
@@ -44,14 +48,25 @@ set completefunc=webcomplete#complete
 set omnifunc=webcomplete#complete
 ```
 
+## Using with Google Chrome
+
+Currently this plugin only supports Google Chrome on Mac OS.
+
+To use it, you must enable "Allow JavaScript from Apple Events" in View >
+Developer submenu.
+
+## Using with Firefox
+
+Currently there is no official support for Firefox, but there is a
+[fork with Firefox support](https://github.com/kimat/webcomplete.vim)
+
 # Limitations
 
 * Currently works on Mac OS because of the `osascript` command line utility,
   which is used to fetch text from the page
 * Assumes you have only one browser window opened. If there is more than one
-  window open, it picks just one of them.
-* Currently works only on Chrome, but it's easy to include support for other
-  browsers by modifying the script.
+  window open, it picks the most recently used.
+* Currently works only on Chrome, but it's possible to use with other browsers.
 
 # Contributing
 
