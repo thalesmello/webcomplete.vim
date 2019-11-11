@@ -33,6 +33,14 @@ default.
 
 - `g:ncm2_webcomplete_script`: Same as option for deoplete, but for ncm2.
 
+## Using with coc
+
+[`coc`](https://github.com/neoclide/coc.nvim) is also supported. Once `coc` is configured
+in your configuration files, the completions for webcomplete should be enabled by
+default.
+
+- `g:coc_webcomplete_script`: Same as option for deoplete, but for coc.
+
 ## Using with `completefunc` or `omnifunc`
 
 Vim allows you to define a `completefunc` or an `omnifunc` to give you
