@@ -6,7 +6,7 @@ let s:loaded = 1
 let g:coc_webcomplete_enabled = get(g:, 'coc_webcomplete_enabled',  1)
 
 let g:coc_webcomplete_script = get(g:, 'coc_webcomplete_script',
-            \ expand('<sfile>:h:h') . "/sh/webcomplete")
+            \ expand('<sfile>:h:h:h:h') . "/sh/webcomplete")
 
 function! coc#source#webcomplete#init() abort
     return {
