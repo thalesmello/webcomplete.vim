@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# We use a FIFO because:
+# 1. We can start reading before qutebrowser finishes writing
+# 2. It minimizes the opportunity for another process to read the file
+tmpdir=$(mktemp -d)
+fifo="$tmpdir/fifo"
+mkfifo "$fifo"
+
+# We leverage qutebrowser's userscript feature to get the text of the page
+qutebrowser ":spawn -u $(dirname "$0")/userscript "$fifo"" >/dev/null 2>&1 &
+cat "$fifo"
+
+# unnecessary, but let's not litter /tmp
+rm -r "$tmpdir"

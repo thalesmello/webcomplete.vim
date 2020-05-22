@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+# Dump all words on the viewed page to the output file (arg $1)
+grep -o -E '\w+' "$QUTE_TEXT" | sort | uniq > $1

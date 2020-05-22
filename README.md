@@ -3,7 +3,11 @@
 A Vim plugin that completes words from the currently open web page in your
 browser.
 
-Currently only works on Mac OS and Chrome. There is a [fork that works with Firefox](https://github.com/kimat/webcomplete.vim).
+Currently works with:
+
+- Chrome on Mac OS.
+- [Qutebrowser](https://github.com/qutebrowser/qutebrowser) on Linux and MacOS.
+- Firefox [in a fork](https://github.com/kimat/webcomplete.vim).
 
 ![demo](./demo.gif)
 
@@ -62,6 +66,12 @@ Currently this plugin only supports Google Chrome on Mac OS.
 
 To use it, you must enable "Allow JavaScript from Apple Events" in View >
 Developer submenu.
+
+## Using with Qutebrowser
+
+Set one of the `_webcomplete_script` variables (described above) to
+`$plugin_dir/sh/qutebrowser/webcomplete`, where `$plugin_dir` is the location
+of this plugin.
 
 ## Using with Firefox
 
